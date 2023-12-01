@@ -6,7 +6,9 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  KeyboardAvoidingView,// para o teclado nao bugar
+  Platform
 } from 'react-native';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
@@ -14,8 +16,28 @@ export default function App() {
   const [task, setTast] = useState(['alisson', 'renan', 'marcelo']);
   const [newTask, setNewTask] = useState('');
 
+
+//logically
+  async function addTask(){
+
+  }
+useEffect(() => {
+  console.log(newTask);
+}, [newTask]);
+
+
+
+
+
+
   return (
     <> 
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={0}
+      behavior="padding"
+      style={{ flex: 1}}
+      enabled={ Platform.OS === 'ios'}
+    >
     <View style={styles.container}>
         <View style={styles.Body}>
           <FlatList 
@@ -25,12 +47,14 @@ export default function App() {
           showsVerticalScrollIndicator={false} //
           renderItem={({ item }) =>(
             <View style={styles.ContainerView}>
-              <Text>[item]</Text>
+              <Text>
+                [item] 
+              </Text>
               <TouchableOpacity>
                 <MaterialIcons 
                 name="delete-forever"
                 size={25}
-                color="#f64c75"
+                color="#000000"
                 />
               </TouchableOpacity>
             </View>
@@ -41,16 +65,19 @@ export default function App() {
         <View style={styles.Form}>
           <TextInput
             style={styles.Input}
-            placeholderTextColor="#999"
+            placeholderTextColor="#1b1e23"
             autoCorrect={true}
             placeholder="Adicione uma tarefa"
-            maxLength={50}
+            maxLength={70}
+            backgroundColor="#d4d5d6"
+            onChangeText={text => setNewTask(text)} //to passando pra nova tarefa o valor do texto, toda vez que o texto mudar
           />
           <TouchableOpacity style={styles.Button}>
             <Ionicons name="ios-add" size={25} color="#fff"/>
           </TouchableOpacity>
          </View>
          </View>
+         </KeyboardAvoidingView>
     </>
   );
 }
@@ -58,11 +85,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#23262b',
     paddingHorizontal: 20,
     paddingVertical: 20,
     marginTop: 50,
-    marginLeft: 15
+    marginLeft: 0
   },
   Body: {
     flex: 1
@@ -74,23 +101,21 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flexDirection: 'row',
     paddingTop: 5,
-    borderTopWidth: 1,
-    borderColor: '#eee',
     marginEnd: 10,
   },
   Input: {
     flex: 1,
-    height: 40,
-    backgroundColor: '#eee',
+    height: 50,
+    backgroundColor: '#fff',
     borderRadius: 4,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: "#eee"
+    borderColor: "#a9a9a9"
   },
   Button: {
-    height: 40,
-    width: 40,
+    height: 50,
+    width: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#1c6cce',
@@ -100,12 +125,22 @@ const styles = StyleSheet.create({
   },
   FlatList: {
     flex: 1,
-    marginTop: 5
+    marginTop: 15,
+    backgroundColor: '#23262b',
   },
   ContainerView: {
     marginBottom: 15,
     padding: 15,
-    borderRadius: 4,
-    backgroundColor: "#eee"
+    borderRadius: 5,
+    backgroundColor: "#a9a9a9",
+    shadowColor: "1c1e22",
+    shadowOffset: 10,
+    
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#16181c",
   }
 });
