@@ -13,17 +13,14 @@ import {
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export default function App() {
-  const [task, setTast] = useState(['alisson', 'renan', 'marcelo']);
+  const [task, setTask] = useState(['alisson', 'renan', 'marcelo']);
   const [newTask, setNewTask] = useState('');
 
 
 //logically
   async function addTask(){
-
+    setTask([ ... task, newTask ]);
   }
-useEffect(() => {
-  console.log(newTask);
-}, [newTask]);
 
 
 
@@ -71,12 +68,19 @@ useEffect(() => {
             maxLength={70}
             backgroundColor="#d4d5d6"
             onChangeText={text => setNewTask(text)} //to passando pra nova tarefa o valor do texto, toda vez que o texto mudar
+            value={newTask}
           />
-          <TouchableOpacity style={styles.Button}>
-            <Ionicons name="ios-add" size={25} color="#fff"/>
+          <TouchableOpacity
+          style={styles.Button}
+          onPress={() => addTask()}
+          >
+            <Ionicons
+              name="ios-add" 
+              size={30}
+              color="#fff"/>
           </TouchableOpacity>
          </View>
-         </View>
+        </View>
          </KeyboardAvoidingView>
     </>
   );
