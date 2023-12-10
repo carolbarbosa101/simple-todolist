@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   FlatList,
   KeyboardAvoidingView,// para o teclado nao bugar
-  Platform
+  Platform,
+  Keyboard
 } from 'react-native';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
@@ -19,13 +20,14 @@ export default function App() {
 
 //logically
   async function addTask(){
+    const search = task.filter(task => task === newTask);
+
+
+
     setTask([ ... task, newTask ]);
+    setNewTask('');
+    Keyboard.dismiss();
   }
-
-
-
-
-
 
   return (
     <> 
@@ -40,18 +42,16 @@ export default function App() {
           <FlatList 
           style={styles.FlatList}
           data={task} //de onde vai vir os dados
-          keyExtractor={item=>item.toString()} // propriedade especie de um id que o react native sabe qual item é aquele e tbm convertermos ele aqui 
+          keyExtractor={item => item.toString()} // propriedade especie de um id que o react native sabe qual item é aquele e tbm convertermos ele aqui 
           showsVerticalScrollIndicator={false} //
           renderItem={({ item }) =>(
             <View style={styles.ContainerView}>
-              <Text>
-                [item] 
-              </Text>
+              <Text style={styles.Texto}>{item}</Text>
               <TouchableOpacity>
                 <MaterialIcons 
-                name="delete-forever"
-                size={25}
-                color="#000000"
+                  name="delete-forever"
+                  size={25}
+                  color="#000000"
                 />
               </TouchableOpacity>
             </View>
