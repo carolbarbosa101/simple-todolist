@@ -9,21 +9,30 @@ import {
   FlatList,
   KeyboardAvoidingView,// para o teclado nao bugar
   Platform,
-  Keyboard
+  Keyboard, // para o teclado voltar pro lugar
+  Alert
 } from 'react-native';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export default function App() {
-  const [task, setTask] = useState(['alisson', 'renan', 'marcelo']);
+  const [task, setTask] = useState(['treino', 'dermo', 'dentista']);
   const [newTask, setNewTask] = useState('');
 
 
 //logically
   async function addTask(){
+    if(newTask == '' || '  '){
+      return;
+    }
+
     const search = task.filter(task => task === newTask);
 
+    if(search.length !== 0 ){
+      Alert.alert("Atenção", "Esta tarefa já existe")
+      return;
+    }
 
-
+  
     setTask([ ... task, newTask ]);
     setNewTask('');
     Keyboard.dismiss();
