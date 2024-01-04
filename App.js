@@ -10,7 +10,8 @@ import {
   KeyboardAvoidingView,// para o teclado nao bugar
   Platform,
   Keyboard, // para o teclado voltar pro lugar
-  Alert
+  Alert,
+  AsyncStorage //deixa salvar dados na memoria do celular
 } from 'react-native';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
@@ -21,7 +22,7 @@ export default function App() {
 
 //logically
   async function addTask(){
-    if(newTask == '' || '  '){
+    if(newTask === ""){
       return;
     }
 
@@ -34,9 +35,52 @@ export default function App() {
 
   
     setTask([ ... task, newTask ]);
-    setNewTask('');
+    setNewTask("");
+
     Keyboard.dismiss();
   }
+
+
+
+  async function removeTask(item) {
+    Alert.alert(
+      "Deletar tarefa?",
+      "Tem certeza que deseja remover esta anotaçã0?"
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            return;
+          },
+          style: 'cancel'
+        },
+        {
+          text: "Ok",
+          onPress: () => setTask(task.filter(tasks => tasks !== item))
+        }
+      ],
+      { cancelable: false }
+      );
+  }
+
+  useEffect(() => {
+    async function salvaDados(){
+      AsyncStorage.setItem("task", JSON.stringify(task));
+    }
+    salvaDados();
+  },[task]);
+
+
+
+  useEffect(() => {
+    async function carregaDados(){
+      const task = await AsyncStorage.getItem("task");
+      if(task){
+        setTask(JSON.parse(task));
+      }
+    }
+    carregaDados();
+  }, []);
 
   return (
     <> 
@@ -56,13 +100,15 @@ export default function App() {
           renderItem={({ item }) =>(
             <View style={styles.ContainerView}>
               <Text style={styles.Texto}>{item}</Text>
-              <TouchableOpacity>
+              
+              <TouchableOpacity onPress={() => removeTask(item)}>
                 <MaterialIcons 
                   name="delete-forever"
                   size={25}
-                  color="#000000"
+                  color="#A51B0B"
                 />
               </TouchableOpacity>
+
             </View>
           )}
          />
@@ -98,7 +144,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#23262b',
+    backgroundColor: '#d4d5d6',
     paddingHorizontal: 20,
     paddingVertical: 20,
     marginTop: 50,
@@ -113,14 +159,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'stretch',
     flexDirection: 'row',
-    paddingTop: 5,
-    marginEnd: 10,
+    paddingTop: 0.1,
+    marginEnd: 2,
   },
   Input: {
     flex: 1,
     height: 50,
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 6,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderWidth: 1,
@@ -134,12 +180,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1c6cce',
     borderRadius: 4,
     marginLeft: 10,
-    marginEnd: 20
+    marginEnd: 0
   },
   FlatList: {
     flex: 1,
-    marginTop: 15,
-    backgroundColor: '#23262b',
+    marginTop: 40,
+    backgroundColor: '#d4d5d6',
   },
   ContainerView: {
     marginBottom: 15,
@@ -152,8 +198,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     borderWidth: 1,
-    borderColor: "#16181c",
+    borderColor: "#d4d5d6",
   }
 });
