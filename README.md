@@ -14,7 +14,7 @@
 <!-- Body -->
 
 ```sh
-npx create-react-native-app
+expo start
 ```
 Once you're up and running with Create React Native App, visit [this tutorial](https://reactnative.dev/docs/tutorial.html) for more information on building apps with React Native.
 
