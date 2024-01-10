@@ -80,6 +80,7 @@ export default function App() {
       }
     }
     carregaDados();
+    
   }, []);
 
   return (
